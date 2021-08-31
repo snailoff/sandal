@@ -7,38 +7,45 @@
 (def sandal-state
   (atom {:work-id        "TimeDefenders"
          :package-prefix "games.timedefenders" ;; package-prefix.project-id
-         :base-path      "c:/TimeDefenders"}))
+         :base-path      "/Users/snailoff/workspace/clojure/sandal_workspace"}))
 
 ;(defn workspace-info []
 ;  (fs/exists? (@sandal-state :base-path))
 ;  (doseq [[k v] @sandal-state]
 ;    (clojure.pprint/pprint )))
-(defn workspace-make []
-  (if-not (fs/exists? (@sandal-state :base-path))
-    (fs/mkdir (@sandal-state :base-path))))
-
-(defn- path-project [target]
-  (format "%s/%s/src/%s/java"
-          (@sandal-state :base-path)
-          (@sandal-state :)
-          target))
-
-(defn- path-project-package [project-name target]
+(defn- path-workspace []
   (format "%s/%s"
-          (path-project project-name target)
-          (str/replace (@sandal-state :package-prefix) #"\." "/")))
+          (@sandal-state :base-path)
+          (@sandal-state :work-id)))
 
-(defn project-make [name]
-  (let [src-main (path-project-package )
-        prefix (str/replace (@sandal-state :package-prefix) #"\." "/")
-        src-main (str root "/" name "/src/main/java/" prefix)
-        src-test (str root "/" name "/src/test/java/" prefix)]
-    (fs/mkdirs src-main)
-    (fs/mkdirs src-test)))
+(defn- path-project [project-name]
+  (format "%s/%s"
+          (path-workspace)
+          project-name))
+
+(defn- path-package [project-name target]
+  (format "%s/src/%s/java/%s/%s"
+          (path-project project-name)
+          target
+          (str/replace (@sandal-state :package-prefix) #"\." "/")
+          project-name))
+
+(defn make-workspace []
+  (let [path (path-workspace)]
+    (if-not (fs/exists? path)
+      (fs/mkdir path))))
+
+(defn make-project [project-name]
+  (let [target-main (path-package project-name "main")
+        target-test (path-package project-name "test")]
+    (if-not (fs/exists? target-main)
+      (fs/mkdirs target-main))
+    (if-not (fs/exists? target-test)
+      (fs/mkdirs target-test))))
 
 
 (defn -main
   [& args]
   (println "Hello world!")
-  (aprint @sandal-state)
-  )
+  (aprint @sandal-state))
+
