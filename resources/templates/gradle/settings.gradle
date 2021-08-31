@@ -1,0 +1,5 @@
+package templates.gradle
+
+rootProject.name = '__root-project-name__'
+
+//include 'common-data'
