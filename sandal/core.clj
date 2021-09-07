@@ -26,7 +26,7 @@
 
 (defn create-workspace []
   (let [path (path-workspace)
-        target-settings (str (path-workspace) "/settings.gradle")
+        target-settings (str (path-workspace) "/settings.txt")
         target-build (str (path-workspace) "/build.gradle")]
     (if-not (fs/exists? path)
       (fs/mkdir path))

@@ -1,14 +1,8 @@
 (ns sandal.gradle
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [sandal.config :as scf]
-            [me.raynes.fs :as fs]))
-
-
-(def resource-gradle-settings "resources/templates/gradle/settings.gradle")
-(def resource-gradle-build-root "resources/templates/gradle/build_root.gradle")
-(def resource-gradle-build-common "resources/templates/gradle/build_common.gradle")
-(def resource-gradle-build-project "resources/templates/gradle/build_project.gradle")
+            [me.raynes.fs :as fs]
+            [sandal.config :as scf]))
 
 (defn- replace-template-gradle-settings [target-file]
   (if-let [content (slurp target-file)]
@@ -40,34 +34,24 @@
         (.write wr new-content)))))
 
 
+(defn launch-gradle-settings [to]
+  (let [from "resources/templates/gradle/settings.txt"]
+    (if-let [target (fs/copy from to)]
+      (replace-template-gradle-settings target))))
 
+(defn launch-gradle-build-root [to]
+  (let [from "resources/templates/gradle/build_root.txt"]
+    (if-let [target (fs/copy from to)]
+      (replace-template-gradle-build-root target))))
 
-(defn- copy-template-gradle-settings [target]
-  (fs/copy resource-gradle-settings target))
+(defn launch-gradle-build-common [to]
+  (let [from "resources/templates/gradle/build_common.txt"]
+    (fs/copy from to)))
 
-(defn- copy-template-gradle-build-root [target]
-  (fs/copy resource-gradle-build-root target))
+(defn launch-gradle-build-project [to]
+  (let [from "resources/templates/gradle/build_project.txt"]
+    (fs/copy from to)))
 
-(defn- copy-template-gradle-build-common [target]
-  (fs/copy resource-gradle-build-common target))
-
-(defn- copy-template-gradle-build-project [target]
-  (fs/copy resource-gradle-build-project target))
-
-
-(defn launch-gradle-settings [target]
-  (if-let [target (copy-template-gradle-settings target)]
-    (replace-template-gradle-settings target)))
-
-(defn launch-gradle-build-root [target]
-  (if-let [target (copy-template-gradle-build-root target)]
-    (replace-template-gradle-build-root target)))
-
-(defn launch-gradle-build-common [target]
-  (copy-template-gradle-build-common target))
-
-(defn launch-gradle-build-project [target]
-  (copy-template-gradle-build-project target))
 
 
 
