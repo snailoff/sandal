@@ -39,6 +39,9 @@
       (with-open [wr (io/writer target-file)]
         (.write wr new-content)))))
 
+
+
+
 (defn- copy-template-gradle-settings [target]
   (fs/copy resource-gradle-settings target))
 
@@ -65,5 +68,15 @@
 
 (defn launch-gradle-build-project [target]
   (copy-template-gradle-build-project target))
+
+
+
+
+
+
+
+
+
+
 
 

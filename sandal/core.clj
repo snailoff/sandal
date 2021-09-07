@@ -1,7 +1,7 @@
 (ns sandal.core
   (:require [clojure.string :as str]
-            [clojure.java.io :as io]
-            [sandal.gradle :as sgr]
+            [sandal.gradle :as s-gr]
+            [sandal.application :as s-ap]
             [sandal.config :as scf]
             [me.raynes.fs :as fs]
             [aprint.core :refer [aprint]]))
@@ -31,28 +31,30 @@
     (if-not (fs/exists? path)
       (fs/mkdir path))
 
-    (sgr/launch-gradle-settings target-settings)
-    (sgr/launch-gradle-build-root target-build)))
+    (s-gr/launch-gradle-settings target-settings)
+    (s-gr/launch-gradle-build-root target-build)))
 
 
 (defn create-project [project-name]
   (let [target-main (path-package project-name "main")
-        target-test (path-package project-name "test")]
+        target-test (path-package project-name "test")
+        application (str target-main "/" (str/capitalize project-name) "Application.java")]
     (if-not (fs/exists? target-main)
       (fs/mkdirs target-main))
     (if-not (fs/exists? target-test)
-      (fs/mkdirs target-test)))
+      (fs/mkdirs target-test))
+    (s-ap/launch-application-class application project-name))
 
   (let [target-build (str (path-project project-name) "/build.gradle")]
     (cond
-      (= project-name "common-data") (sgr/launch-gradle-build-common target-build)
-      (= project-name "common-module") (sgr/launch-gradle-build-common target-build)
-      :else (sgr/launch-gradle-build-project target-build))))
+      (= project-name "common-data") (s-gr/launch-gradle-build-common target-build)
+      (= project-name "common-module") (s-gr/launch-gradle-build-common target-build)
+      :else (s-gr/launch-gradle-build-project target-build))))
+
 
 
 ;; module create use
 (defn create-module [])
-
 ;; function create user userInfo
 ;; => userInfoControlelr, userInfoService
 (defn create-function [])

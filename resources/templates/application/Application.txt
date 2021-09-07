@@ -1,0 +1,19 @@
+package templates.application;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+
+import java.util.TimeZone;
+
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+public class __project-name__Application {
+
+    public static void main(String[] args) {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        System.setProperty("javax.net.ssl.sessionCacheSize", "0");
+        SpringApplication.run(__project-name__Application.class, args);
+    }
+
+}
